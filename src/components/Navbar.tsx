@@ -1,9 +1,9 @@
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.png";
-import React from "react";
+import React, { useState } from "react";
 
 const Navbar = () => {
-	const [dropdownOpen, setDropdownOpen] = React.useState(false);
+	const [dropdownOpen, setDropdownOpen] = useState(false);
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">

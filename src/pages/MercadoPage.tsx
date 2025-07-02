@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ProductCard from "../components/ProductCard";
 import ModalCompra from "../components/ModalCompra";
 import ModalAddProduct from "../components/ModalAddProduct";
@@ -33,9 +33,9 @@ const initialProducts = [
 ];
 
 const MercadoPage = () => {
-	const [showBuyModal, setShowBuyModal] = React.useState(false);
-	const [showAddModal, setShowAddModal] = React.useState(false);
-	const [products, setProducts] = React.useState(initialProducts);
+	const [showBuyModal, setShowBuyModal] = useState(false);
+	const [showAddModal, setShowAddModal] = useState(false);
+	const [products, setProducts] = useState(initialProducts);
 
 	const handleAddProduct = (prod: {
 		productName: string;

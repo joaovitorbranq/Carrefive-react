@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type ModalCompraProps = {
 	show: boolean;
@@ -11,9 +11,9 @@ const ModalCompra: React.FC<ModalCompraProps> = ({
 	onClose,
 	onConcluir,
 }) => {
-	const [qtd, setQtd] = React.useState(1);
+	const [qtd, setQtd] = useState(1);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (show) setQtd(1);
 	}, [show]);
 

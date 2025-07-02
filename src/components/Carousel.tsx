@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 type CarouselItem = {
 	src: string;
@@ -10,7 +10,7 @@ type CarouselProps = {
 };
 
 const Carousel = ({ items }: CarouselProps) => {
-	const [activeIdx, setActiveIdx] = React.useState(0);
+	const [activeIdx, setActiveIdx] = useState(0);
 
 	const goTo = (idx: number) => setActiveIdx(idx);
 	const prev = () =>

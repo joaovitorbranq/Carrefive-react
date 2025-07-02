@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 type ModalAddProductProps = {
 	show: boolean;
 	onClose: () => void;
@@ -14,13 +14,13 @@ const ModalAddProduct: React.FC<ModalAddProductProps> = ({
 	onClose,
 	onSave,
 }) => {
-	const [form, setForm] = React.useState({
+	const [form, setForm] = useState({
 		productName: "",
 		description: "",
 		unitType: "",
 	});
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (show) setForm({ productName: "", description: "", unitType: "" });
 	}, [show]);
 
