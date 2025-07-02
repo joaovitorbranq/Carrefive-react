@@ -8,27 +8,36 @@ import DorflexImg from "../assets/img/drogaria/dorflex.webp";
 import HidratanteImg from "../assets/img/drogaria/hidratante.webp";
 import ProtetorSolarImg from "../assets/img/drogaria/protetor-solar.webp";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
+import type { IProduct } from "../types/types";
 
-const initialProducts = [
+const initialProducts: IProduct[] = [
 	{
-		img: DipironaImg,
-		title: "Dipirona",
+		productName: "Dipirona",
 		description: "Para dores de cabeça e febre.",
+		price: 10.0,
+		currency: 1,
+		imgSrc: DipironaImg,
 	},
 	{
-		img: DorflexImg,
-		title: "Dorflex",
+		productName: "Dorflex",
 		description: "Alívio rápido para dores comuns.",
+		price: 12.5,
+		currency: 1,
+		imgSrc: DorflexImg,
 	},
 	{
-		img: HidratanteImg,
-		title: "Hidratante",
+		productName: "Hidratante",
 		description: "Hidrata e refresca a pele.",
+		price: 20.0,
+		currency: 1,
+		imgSrc: HidratanteImg,
 	},
 	{
-		img: ProtetorSolarImg,
-		title: "Protetor Solar",
+		productName: "Protetor Solar",
 		description: "Protege sua pele dos raios UV.",
+		price: 35.0,
+		currency: 1,
+		imgSrc: ProtetorSolarImg,
 	},
 ];
 
@@ -37,17 +46,12 @@ const DrogariaPage = () => {
 	const [showAddModal, setShowAddModal] = useState(false);
 	const [products, setProducts] = useState(initialProducts);
 
-	const handleAddProduct = (prod: {
-		productName: string;
-		description: string;
-		unitType: string;
-	}) => {
+	const handleAddProduct = (prod: IProduct) => {
 		setProducts([
 			...products,
 			{
-				img: PlaceholderImg,
-				title: prod.productName,
-				description: prod.description,
+				...prod,
+				imgSrc: PlaceholderImg,
 			},
 		]);
 		setShowAddModal(false);
@@ -68,7 +72,11 @@ const DrogariaPage = () => {
 				</div>
 				<div className="row row-cols-1 row-cols-md-4 g-4">
 					{products.map((p, i) => (
-						<ProductCard key={i} {...p} onBuy={() => setShowBuyModal(true)} />
+						<ProductCard
+							key={i}
+							product={p}
+							onBuy={() => setShowBuyModal(true)}
+						/>
 					))}
 				</div>
 				<ModalBuyProduct

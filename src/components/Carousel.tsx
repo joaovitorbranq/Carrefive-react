@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 type CarouselItem = {
 	src: string;
@@ -12,18 +12,23 @@ type CarouselProps = {
 const Carousel = ({ items }: CarouselProps) => {
 	const [activeIdx, setActiveIdx] = useState(0);
 
-	const goTo = (idx: number) => setActiveIdx(idx);
-	const prev = () =>
+	const goTo = useCallback((idx: number) => {
+		setActiveIdx(idx);
+	}, []);
+
+	const prev = useCallback(() => {
 		setActiveIdx((prevIdx) => (prevIdx === 0 ? items.length - 1 : prevIdx - 1));
-	const next = () =>
+	}, [items.length]);
+
+	const next = useCallback(() => {
 		setActiveIdx((prevIdx) => (prevIdx === items.length - 1 ? 0 : prevIdx + 1));
+	}, [items.length]);
 
 	useEffect(() => {
-		// auto-play a cada 4s (opcional, remova se não quiser autoplay)
+		// vai para proxima imagem a cada 4 segundos
 		const interval = setInterval(() => next(), 4000);
 		return () => clearInterval(interval);
-		// eslint-disable-next-line
-	}, [activeIdx, items.length]);
+	}, [next]);
 
 	return (
 		<div className="position-relative" style={{ marginTop: 56 }}>
@@ -42,6 +47,7 @@ const Carousel = ({ items }: CarouselProps) => {
 					</div>
 				))}
 			</div>
+
 			{/* Indicadores */}
 			<div className="carousel-indicators" style={{ bottom: 10 }}>
 				{items.map((_, idx) => (
@@ -64,6 +70,7 @@ const Carousel = ({ items }: CarouselProps) => {
 					/>
 				))}
 			</div>
+
 			{/* Botões */}
 			<button
 				className="carousel-control-prev"

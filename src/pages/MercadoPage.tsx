@@ -8,46 +8,50 @@ import DesodoranteImg from "../assets/img/mercado/desodorante.webp";
 import ChocolateImg from "../assets/img/mercado/ferrero-rocher.webp";
 import VinhoImg from "../assets/img/mercado/vinho.webp";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
+import type { IProduct } from "../types/types";
 
-const initialProducts = [
+const initialProducts: IProduct[] = [
 	{
-		img: ChandelleImg,
-		title: "Chandelle",
+		productName: "Chandelle",
 		description: "Chandelle sabor chocolate.",
+		price: 5.0,
+		currency: 1,
+		imgSrc: ChandelleImg,
 	},
 	{
-		img: DesodoranteImg,
-		title: "Desodorante",
+		productName: "Desodorante",
 		description: "Desodorante Dove original.",
+		price: 12.9,
+		currency: 1,
+		imgSrc: DesodoranteImg,
 	},
 	{
-		img: ChocolateImg,
-		title: "Chocolate",
+		productName: "Chocolate",
 		description: "Chocolate Ferrero Rocher.",
+		price: 25.0,
+		currency: 1,
+		imgSrc: ChocolateImg,
 	},
 	{
-		img: VinhoImg,
-		title: "Vinho",
+		productName: "Vinho",
 		description: "Vinho Reservado Carmenere.",
+		price: 45.0,
+		currency: 1,
+		imgSrc: VinhoImg,
 	},
 ];
 
 const MercadoPage = () => {
 	const [showBuyModal, setShowBuyModal] = useState(false);
 	const [showAddModal, setShowAddModal] = useState(false);
-	const [products, setProducts] = useState(initialProducts);
+	const [products, setProducts] = useState<IProduct[]>(initialProducts);
 
-	const handleAddProduct = (prod: {
-		productName: string;
-		description: string;
-		unitType: string;
-	}) => {
+	const handleAddProduct = (prod: IProduct) => {
 		setProducts([
 			...products,
 			{
-				img: PlaceholderImg, // imagem de placeholder
-				title: prod.productName,
-				description: prod.description,
+				...prod,
+				imgSrc: PlaceholderImg,
 			},
 		]);
 		setShowAddModal(false);
@@ -68,7 +72,11 @@ const MercadoPage = () => {
 				</div>
 				<div className="row row-cols-1 row-cols-md-4 g-4">
 					{products.map((p, i) => (
-						<ProductCard key={i} {...p} onBuy={() => setShowBuyModal(true)} />
+						<ProductCard
+							key={i}
+							product={p}
+							onBuy={() => setShowBuyModal(true)}
+						/>
 					))}
 				</div>
 				<ModalBuyProduct

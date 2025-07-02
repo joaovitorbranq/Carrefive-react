@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-type ModalCompraProps = {
+interface IModalBuyProductProps {
 	show: boolean;
 	onClose: () => void;
 	onConcluir: (qtd: number) => void;
-};
+}
 
-const ModalBuyProduct: React.FC<ModalCompraProps> = ({
+const ModalBuyProduct: React.FC<IModalBuyProductProps> = ({
 	show,
 	onClose,
 	onConcluir,
