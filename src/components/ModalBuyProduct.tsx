@@ -6,7 +6,7 @@ type ModalCompraProps = {
 	onConcluir: (qtd: number) => void;
 };
 
-const ModalCompra: React.FC<ModalCompraProps> = ({
+const ModalBuyProduct: React.FC<ModalCompraProps> = ({
 	show,
 	onClose,
 	onConcluir,
@@ -72,4 +72,4 @@ const ModalCompra: React.FC<ModalCompraProps> = ({
 	);
 };
 
-export default ModalCompra;
+export default ModalBuyProduct;

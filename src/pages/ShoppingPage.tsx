@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ProductCard from "../components/ProductCard";
-import ModalCompra from "../components/ModalCompra";
+import ModalBuyProduct from "../components/ModalBuyProduct";
 import ModalAddProduct from "../components/ModalAddProduct";
 
 import CamaImg from "../assets/img/shopping/cama.webp";
@@ -71,7 +71,7 @@ const ShoppingPage = () => {
 						<ProductCard key={i} {...p} onBuy={() => setShowBuyModal(true)} />
 					))}
 				</div>
-				<ModalCompra
+				<ModalBuyProduct
 					show={showBuyModal}
 					onClose={() => setShowBuyModal(false)}
 					onConcluir={() => setShowBuyModal(false)}
