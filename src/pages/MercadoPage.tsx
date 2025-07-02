@@ -77,7 +77,7 @@ const MercadoPage = () => {
 					onConcluir={() => setShowBuyModal(false)}
 				/>
 				<ModalAddProduct
-					show={showAddModal}
+					isOpen={showAddModal}
 					onClose={() => setShowAddModal(false)}
 					onSave={handleAddProduct}
 				/>
