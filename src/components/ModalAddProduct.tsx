@@ -6,23 +6,25 @@ export interface ICurrency {
 	label: string;
 }
 
-type ModalAddProductProps = {
+export interface IProductFormData {
+	productName: string;
+	description: string;
+	price: number;
+	currency: number; // id da currency selecionada
+}
+
+interface IModalAddProductProps {
 	show: boolean;
 	onClose: () => void;
-	onSave: (data: {
-		productName: string;
-		description: string;
-		price: number;
-		currency: number; // id da currency selecionada
-	}) => void;
-};
+	onSave: (data: IProductFormData) => void;
+}
 
-const ModalAddProduct: React.FC<ModalAddProductProps> = ({
+const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 	show,
 	onClose,
 	onSave,
 }) => {
-	const [form, setForm] = useState({
+	const [form, setForm] = useState<IProductFormData>({
 		productName: "",
 		description: "",
 		price: 0,
@@ -45,8 +47,6 @@ const ModalAddProduct: React.FC<ModalAddProductProps> = ({
 			});
 	}, [show, currencies]);
 
-	if (!show) return null;
-
 	const handleChange = (
 		e: React.ChangeEvent<
 			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -68,6 +68,12 @@ const ModalAddProduct: React.FC<ModalAddProductProps> = ({
 		e.preventDefault();
 		onSave(form);
 	};
+
+	useEffect(() => {
+		console.log(form, "form");
+	}, [form]);
+
+	if (!show) return null;
 
 	return (
 		<div
