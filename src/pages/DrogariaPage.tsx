@@ -8,35 +8,41 @@ import DorflexImg from "../assets/img/drogaria/dorflex.webp";
 import HidratanteImg from "../assets/img/drogaria/hidratante.webp";
 import ProtetorSolarImg from "../assets/img/drogaria/protetor-solar.webp";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
-import type { IProduct } from "../types/types";
+import type { ICurrency, IProduct } from "../types/types";
+
+const defaultCurrency: ICurrency = {
+	id: 1,
+	name: "real",
+	label: "R$",
+};
 
 const initialProducts: IProduct[] = [
 	{
-		productName: "Dipirona",
+		name: "Dipirona",
 		description: "Para dores de cabeça e febre.",
 		price: 10.0,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: DipironaImg,
 	},
 	{
-		productName: "Dorflex",
+		name: "Dorflex",
 		description: "Alívio rápido para dores comuns.",
 		price: 12.5,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: DorflexImg,
 	},
 	{
-		productName: "Hidratante",
+		name: "Hidratante",
 		description: "Hidrata e refresca a pele.",
 		price: 20.0,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: HidratanteImg,
 	},
 	{
-		productName: "Protetor Solar",
+		name: "Protetor Solar",
 		description: "Protege sua pele dos raios UV.",
 		price: 35.0,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: ProtetorSolarImg,
 	},
 ];

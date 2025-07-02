@@ -7,17 +7,25 @@ interface IModalAddProductProps {
 	onSave: (data: IProduct) => void;
 }
 
+const defaultCurrency: ICurrency = {
+	id: 1,
+	name: "real",
+	label: "R$",
+};
+
+const initalProduct: IProduct = {
+	name: "",
+	description: "",
+	price: 0,
+	currency: defaultCurrency,
+};
+
 const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 	isOpen,
 	onClose,
 	onSave,
 }) => {
-	const [formProduto, setFormProduto] = useState<IProduct>({
-		productName: "",
-		description: "",
-		price: 0,
-		currency: 1, // default id da currency
-	});
+	const [formProduto, setFormProduto] = useState<IProduct>(initalProduct);
 
 	const [currencies] = useState<ICurrency[]>([
 		{ id: 1, name: "real", label: "R$" },
@@ -28,10 +36,10 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 	useEffect(() => {
 		if (isOpen)
 			setFormProduto({
-				productName: "",
+				name: "",
 				description: "",
 				price: 0,
-				currency: currencies[0]?.id || 1,
+				currency: currencies[0],
 			});
 	}, [isOpen, currencies]);
 
@@ -41,13 +49,14 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 		>
 	) => {
 		const { name, value } = e.target;
+
 		setFormProduto((prev) => ({
 			...prev,
 			[name]:
 				name === "price"
 					? Number(value)
 					: name === "currency"
-					? Number(value)
+					? currencies.find((c) => c.id === Number(value)) || prev.currency
 					: value,
 		}));
 	};
@@ -84,16 +93,16 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 					<form onSubmit={handleSubmit}>
 						<div className="modal-body">
 							<div className="mb-3">
-								<label htmlFor="productName" className="form-label">
+								<label htmlFor="name" className="form-label">
 									Nome do produto
 								</label>
 								<input
 									type="text"
 									className="form-control"
-									id="productName"
-									name="productName"
+									id="name"
+									name="name"
 									placeholder="Digite o nome"
-									value={formProduto.productName}
+									value={formProduto.name}
 									onChange={handleChange}
 									required
 								/>
@@ -137,7 +146,7 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 									className="form-select"
 									id="currency"
 									name="currency"
-									value={formProduto.currency}
+									value={formProduto.currency.id}
 									onChange={handleChange}
 									required
 								>

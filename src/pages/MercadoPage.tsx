@@ -8,35 +8,41 @@ import DesodoranteImg from "../assets/img/mercado/desodorante.webp";
 import ChocolateImg from "../assets/img/mercado/ferrero-rocher.webp";
 import VinhoImg from "../assets/img/mercado/vinho.webp";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
-import type { IProduct } from "../types/types";
+import type { ICurrency, IProduct } from "../types/types";
+
+const defaultCurrency: ICurrency = {
+	id: 1,
+	name: "real",
+	label: "R$",
+};
 
 const initialProducts: IProduct[] = [
 	{
-		productName: "Chandelle",
+		name: "Chandelle",
 		description: "Chandelle sabor chocolate.",
 		price: 5.0,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: ChandelleImg,
 	},
 	{
-		productName: "Desodorante",
+		name: "Desodorante",
 		description: "Desodorante Dove original.",
 		price: 12.9,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: DesodoranteImg,
 	},
 	{
-		productName: "Chocolate",
+		name: "Chocolate",
 		description: "Chocolate Ferrero Rocher.",
 		price: 25.0,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: ChocolateImg,
 	},
 	{
-		productName: "Vinho",
+		name: "Vinho",
 		description: "Vinho Reservado Carmenere.",
 		price: 45.0,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: VinhoImg,
 	},
 ];

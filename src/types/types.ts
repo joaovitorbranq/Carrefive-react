@@ -1,8 +1,8 @@
 export interface IProduct {
-	productName: string;
+	name: string;
 	description: string;
 	price: number;
-	currency: number; // id da currency selecionada
+	currency: ICurrency;
 	imgSrc?: string;
 }
 

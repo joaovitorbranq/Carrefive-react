@@ -8,35 +8,41 @@ import CelularImg from "../assets/img/shopping/celular.webp";
 import PneuImg from "../assets/img/shopping/pneu.webp";
 import TvImg from "../assets/img/shopping/tv.webp";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
-import type { IProduct } from "../types/types";
+import type { ICurrency, IProduct } from "../types/types";
+
+const defaultCurrency: ICurrency = {
+	id: 1,
+	name: "real",
+	label: "R$",
+};
 
 const initialProducts: IProduct[] = [
 	{
-		productName: "Cama Box",
+		name: "Cama Box",
 		description: "Cama box de solteiro.",
 		price: 1200,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: CamaImg,
 	},
 	{
-		productName: "Iphone 16",
+		name: "Iphone 16",
 		description: "Iphone 16 PRO MAX.",
 		price: 9999,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: CelularImg,
 	},
 	{
-		productName: "Pneu",
+		name: "Pneu",
 		description: "Pneu para carros de médio porte.",
 		price: 450,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: PneuImg,
 	},
 	{
-		productName: "TV",
+		name: "TV",
 		description: "SmartTV 50 polegadas.",
 		price: 2500,
-		currency: 1,
+		currency: defaultCurrency,
 		imgSrc: TvImg,
 	},
 ];
