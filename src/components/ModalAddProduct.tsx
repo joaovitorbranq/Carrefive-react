@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
+
+export interface ICurrency {
+	id: number;
+	name: string;
+	label: string;
+}
+
 type ModalAddProductProps = {
 	show: boolean;
 	onClose: () => void;
 	onSave: (data: {
 		productName: string;
 		description: string;
-		unitType: string;
+		price: number;
+		currency: number; // id da currency selecionada
 	}) => void;
 };
 
@@ -17,12 +25,25 @@ const ModalAddProduct: React.FC<ModalAddProductProps> = ({
 	const [form, setForm] = useState({
 		productName: "",
 		description: "",
-		unitType: "",
+		price: 0,
+		currency: 1, // default id da currency
 	});
 
+	const [currencies] = useState<ICurrency[]>([
+		{ id: 1, name: "real", label: "R$" },
+		{ id: 2, name: "dolar", label: "US$" },
+		{ id: 3, name: "euro", label: "€" },
+	]);
+
 	useEffect(() => {
-		if (show) setForm({ productName: "", description: "", unitType: "" });
-	}, [show]);
+		if (show)
+			setForm({
+				productName: "",
+				description: "",
+				price: 0,
+				currency: currencies[0]?.id || 1,
+			});
+	}, [show, currencies]);
 
 	if (!show) return null;
 
@@ -31,8 +52,18 @@ const ModalAddProduct: React.FC<ModalAddProductProps> = ({
 			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 		>
 	) => {
-		setForm({ ...form, [e.target.name]: e.target.value });
+		const { name, value } = e.target;
+		setForm((prev) => ({
+			...prev,
+			[name]:
+				name === "price"
+					? Number(value)
+					: name === "currency"
+					? Number(value)
+					: value,
+		}));
 	};
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		onSave(form);
@@ -89,24 +120,38 @@ const ModalAddProduct: React.FC<ModalAddProductProps> = ({
 								></textarea>
 							</div>
 							<div className="mb-3">
-								<label htmlFor="unitType" className="form-label">
-									Unidade de medida
+								<label htmlFor="price" className="form-label">
+									Preço
+								</label>
+								<input
+									type="number"
+									min="0"
+									className="form-control"
+									id="price"
+									name="price"
+									placeholder="Digite o preço"
+									value={form.price}
+									onChange={handleChange}
+									required
+								/>
+							</div>
+							<div className="mb-3">
+								<label htmlFor="currency" className="form-label">
+									Moeda
 								</label>
 								<select
 									className="form-select"
-									id="unitType"
-									name="unitType"
-									value={form.unitType}
+									id="currency"
+									name="currency"
+									value={form.currency}
 									onChange={handleChange}
 									required
 								>
-									<option value="" disabled>
-										Selecione
-									</option>
-									<option value="kg">kg</option>
-									<option value="gramas">gramas</option>
-									<option value="litros">litros</option>
-									<option value="metros">metros</option>
+									{currencies.map((currency) => (
+										<option key={currency.id} value={currency.id}>
+											{currency.label}
+										</option>
+									))}
 								</select>
 							</div>
 						</div>
