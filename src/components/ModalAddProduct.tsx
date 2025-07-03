@@ -129,6 +129,8 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 								<input
 									type="number"
 									min="0"
+									step="0.01"
+									inputMode="decimal"
 									className="form-control"
 									id="price"
 									name="price"

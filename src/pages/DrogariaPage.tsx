@@ -11,9 +11,9 @@ import PlaceholderImg from "../assets/img/placeholder.jpg";
 import type { ICurrency, IProduct } from "../types/types";
 
 const defaultCurrency: ICurrency = {
-	id: 1,
-	name: "real",
-	label: "R$",
+	id: 2,
+	name: "dolar",
+	label: "US$",
 };
 
 const initialProducts: IProduct[] = [
