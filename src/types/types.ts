@@ -11,3 +11,12 @@ export interface ICurrency {
 	name: string;
 	label: string;
 }
+
+export interface IUser {
+	id: number;
+	name: string;
+	email: string;
+	password: string;
+	birthDate: string;
+	isAdmin: boolean;
+}

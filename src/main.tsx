@@ -4,9 +4,12 @@ import "./index.css";
 import App from "./App.tsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { UserProvider } from "./contexts/UserProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<App />
+		<UserProvider>
+			<App />
+		</UserProvider>
 	</StrictMode>
 );
