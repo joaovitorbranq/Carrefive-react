@@ -1,13 +1,31 @@
 import React, { useState } from "react";
+import { useUser } from "../hooks/useUser";
+import { loginUser } from "../services/auth";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const { login } = useUser();
+	const navigate = useNavigate();
+
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		// lógica de login virá depois
-		console.log({ email, password });
+		setError("");
+
+		try {
+			const user = await loginUser({ email, password });
+			login(user);
+			navigate("/"); // redireciona para home
+		} catch (err: any) {
+			if (err.response?.status === 401) {
+				setError("Email ou senha inválidos");
+			} else {
+				setError("Erro ao tentar logar. Tente novamente.");
+			}
+		}
 	};
 
 	return (
@@ -40,6 +58,9 @@ const LoginPage = () => {
 						required
 					/>
 				</div>
+
+				{error && <div className="alert alert-danger">{error}</div>}
+
 				<button type="submit" className="btn btn-primary w-100">
 					Entrar
 				</button>

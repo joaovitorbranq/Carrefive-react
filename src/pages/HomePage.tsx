@@ -7,6 +7,7 @@ import Carousel from "../components/Carousel";
 import Banner1 from "../assets/img/banners/banner1.webp";
 import Banner2 from "../assets/img/banners/banner2.webp";
 import Banner3 from "../assets/img/banners/banner3.webp";
+import { useUser } from "../hooks/useUser";
 
 const HomePage = () => {
 	const banners = [
@@ -14,6 +15,11 @@ const HomePage = () => {
 		{ src: Banner2, alt: "Banner 2" },
 		{ src: Banner3, alt: "Banner 3" },
 	];
+
+	const { user } = useUser();
+
+	console.log(user, "user");
+
 	const cards = [
 		{ img: TvImg, alt: "TV" },
 		{ img: VinhoImg, alt: "Vinho" },
