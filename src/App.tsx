@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import DrogariaPage from "./pages/DrogariaPage";
 import ShoppingPage from "./pages/ShoppingPage";
 import Footer from "./components/Footer";
+import FavoritesPage from "./pages/FavoritesPage";
 
 const App = () => {
 	const defaultStyles: React.CSSProperties = {
@@ -25,6 +26,7 @@ const App = () => {
 						<Route path="/drogaria" element={<DrogariaPage />} />
 						<Route path="/shopping" element={<ShoppingPage />} />
 						<Route path="/login" element={<LoginPage />} />
+						<Route path="/favorites" element={<FavoritesPage />} />
 					</Routes>
 				</div>
 				<Footer />

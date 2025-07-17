@@ -1,13 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.png";
 import React, { useState } from "react";
+import { useUser } from "../hooks/useUser"; // seu hook de autenticação
 
 const Navbar = () => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const { user } = useUser(); // 👈 pega usuário logado
 
 	const handleToggleMenu = () => setMenuOpen((open) => !open);
-	const handleNavClick = () => setMenuOpen(false); // Fecha ao clicar em algum link
+	const handleNavClick = () => setMenuOpen(false);
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -22,6 +24,7 @@ const Navbar = () => {
 					/>
 					Carrefive
 				</Link>
+
 				<button
 					className="navbar-toggler"
 					type="button"
@@ -32,6 +35,7 @@ const Navbar = () => {
 				>
 					<span className="navbar-toggler-icon"></span>
 				</button>
+
 				<div
 					className={`collapse navbar-collapse${menuOpen ? " show" : ""}`}
 					id="navbarNav"
@@ -82,8 +86,19 @@ const Navbar = () => {
 								</li>
 							</ul>
 						</div>
+
+						{user && (
+							<NavLink
+								className="nav-link me-3"
+								to="/favorites"
+								onClick={handleNavClick}
+							>
+								Favoritos
+							</NavLink>
+						)}
 					</div>
 				</div>
+
 				<div className="d-flex align-items-center ms-auto">
 					<Link
 						to="/login"
