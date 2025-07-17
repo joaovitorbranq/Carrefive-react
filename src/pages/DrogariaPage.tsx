@@ -1,56 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import ModalBuyProduct from "../components/ModalBuyProduct";
 import ModalAddProduct from "../components/ModalAddProduct";
-
-import DipironaImg from "../assets/img/drogaria/dipirona.webp";
-import DorflexImg from "../assets/img/drogaria/dorflex.webp";
-import HidratanteImg from "../assets/img/drogaria/hidratante.webp";
-import ProtetorSolarImg from "../assets/img/drogaria/protetor-solar.webp";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
-import type { ICurrency, IProduct } from "../types/types";
-
-const defaultCurrency: ICurrency = {
-	id: 2,
-	name: "dolar",
-	label: "US$",
-};
-
-const initialProducts: IProduct[] = [
-	{
-		name: "Dipirona",
-		description: "Para dores de cabeça e febre.",
-		price: 10.0,
-		currency: defaultCurrency,
-		imgSrc: DipironaImg,
-	},
-	{
-		name: "Dorflex",
-		description: "Alívio rápido para dores comuns.",
-		price: 12.5,
-		currency: defaultCurrency,
-		imgSrc: DorflexImg,
-	},
-	{
-		name: "Hidratante",
-		description: "Hidrata e refresca a pele.",
-		price: 20.0,
-		currency: defaultCurrency,
-		imgSrc: HidratanteImg,
-	},
-	{
-		name: "Protetor Solar",
-		description: "Protege sua pele dos raios UV.",
-		price: 35.0,
-		currency: defaultCurrency,
-		imgSrc: ProtetorSolarImg,
-	},
-];
+import type { IProduct } from "../types/types";
+import { fetchProductsByType } from "../services/product";
 
 const DrogariaPage = () => {
 	const [showBuyModal, setShowBuyModal] = useState(false);
 	const [showAddModal, setShowAddModal] = useState(false);
-	const [products, setProducts] = useState(initialProducts);
+	const [products, setProducts] = useState<IProduct[]>([]);
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+
+	const loadProducts = async (page: number = 0) => {
+		try {
+			const data = await fetchProductsByType(3, page); // Tipo Drogaria = 3
+			setProducts(data.content);
+			setTotalPages(data.totalPages);
+			setCurrentPage(data.number);
+		} catch (error) {
+			console.error("Erro ao buscar produtos:", error);
+		}
+	};
+
+	useEffect(() => {
+		loadProducts();
+	}, []);
+
+	const handlePageChange = (page: number) => {
+		loadProducts(page);
+	};
 
 	const handleAddProduct = (prod: IProduct) => {
 		setProducts([
@@ -77,14 +57,34 @@ const DrogariaPage = () => {
 					</button>
 				</div>
 				<div className="row row-cols-1 row-cols-md-4 g-4">
-					{products.map((p, i) => (
+					{products.map((p) => (
 						<ProductCard
-							key={i}
+							key={p.id}
 							product={p}
 							onBuy={() => setShowBuyModal(true)}
 						/>
 					))}
 				</div>
+
+				{/* Paginação Bootstrap */}
+				<nav className="mt-4">
+					<ul className="pagination justify-content-center">
+						{Array.from({ length: totalPages }).map((_, index) => (
+							<li
+								key={index}
+								className={`page-item ${index === currentPage ? "active" : ""}`}
+							>
+								<button
+									className="page-link"
+									onClick={() => handlePageChange(index)}
+								>
+									{index + 1}
+								</button>
+							</li>
+						))}
+					</ul>
+				</nav>
+
 				<ModalBuyProduct
 					show={showBuyModal}
 					onClose={() => setShowBuyModal(false)}

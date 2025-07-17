@@ -1,56 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import ModalBuyProduct from "../components/ModalBuyProduct";
 import ModalAddProduct from "../components/ModalAddProduct";
-
-import CamaImg from "../assets/img/shopping/cama.webp";
-import CelularImg from "../assets/img/shopping/celular.webp";
-import PneuImg from "../assets/img/shopping/pneu.webp";
-import TvImg from "../assets/img/shopping/tv.webp";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
-import type { ICurrency, IProduct } from "../types/types";
-
-const defaultCurrency: ICurrency = {
-	id: 1,
-	name: "real",
-	label: "R$",
-};
-
-const initialProducts: IProduct[] = [
-	{
-		name: "Cama Box",
-		description: "Cama box de solteiro.",
-		price: 1200,
-		currency: defaultCurrency,
-		imgSrc: CamaImg,
-	},
-	{
-		name: "Iphone 16",
-		description: "Iphone 16 PRO MAX.",
-		price: 9999,
-		currency: defaultCurrency,
-		imgSrc: CelularImg,
-	},
-	{
-		name: "Pneu",
-		description: "Pneu para carros de médio porte.",
-		price: 450,
-		currency: defaultCurrency,
-		imgSrc: PneuImg,
-	},
-	{
-		name: "TV",
-		description: "SmartTV 50 polegadas.",
-		price: 2500,
-		currency: defaultCurrency,
-		imgSrc: TvImg,
-	},
-];
+import type { IProduct } from "../types/types";
+import { fetchProductsByType } from "../services/product";
 
 const ShoppingPage = () => {
 	const [showBuyModal, setShowBuyModal] = useState(false);
 	const [showAddModal, setShowAddModal] = useState(false);
-	const [products, setProducts] = useState<IProduct[]>(initialProducts);
+	const [products, setProducts] = useState<IProduct[]>([]);
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+
+	const loadProducts = async (page: number = 0) => {
+		try {
+			const data = await fetchProductsByType(1, page); // shopping = 1
+			setProducts(data.content);
+			setTotalPages(data.totalPages);
+			setCurrentPage(data.number);
+		} catch (error) {
+			console.error("Erro ao buscar produtos:", error);
+		}
+	};
+
+	useEffect(() => {
+		loadProducts();
+	}, []);
+
+	const handlePageChange = (page: number) => {
+		loadProducts(page);
+	};
 
 	const handleAddProduct = (prod: IProduct) => {
 		setProducts([
@@ -77,14 +57,34 @@ const ShoppingPage = () => {
 					</button>
 				</div>
 				<div className="row row-cols-1 row-cols-md-4 g-4">
-					{products.map((p, i) => (
+					{products.map((p) => (
 						<ProductCard
-							key={i}
+							key={p.id}
 							product={p}
 							onBuy={() => setShowBuyModal(true)}
 						/>
 					))}
 				</div>
+
+				{/* Paginação Bootstrap */}
+				<nav className="mt-4">
+					<ul className="pagination justify-content-center">
+						{Array.from({ length: totalPages }).map((_, index) => (
+							<li
+								key={index}
+								className={`page-item ${index === currentPage ? "active" : ""}`}
+							>
+								<button
+									className="page-link"
+									onClick={() => handlePageChange(index)}
+								>
+									{index + 1}
+								</button>
+							</li>
+						))}
+					</ul>
+				</nav>
+
 				<ModalBuyProduct
 					show={showBuyModal}
 					onClose={() => setShowBuyModal(false)}
