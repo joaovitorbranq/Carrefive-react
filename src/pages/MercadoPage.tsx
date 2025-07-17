@@ -57,11 +57,7 @@ const MercadoPage = () => {
 				</div>
 				<div className="row row-cols-1 row-cols-md-4 g-4">
 					{products.map((p) => (
-						<ProductCard
-							key={p.id}
-							product={p}
-							onBuy={() => setShowBuyModal(true)}
-						/>
+						<ProductCard key={p.id} product={p} />
 					))}
 				</div>
 
