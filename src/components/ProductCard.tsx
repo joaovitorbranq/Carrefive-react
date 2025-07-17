@@ -4,6 +4,7 @@ import { formatNumberToPrice } from "../utils/utils";
 import { useUser } from "../hooks/useUser";
 import { useFavorites } from "../hooks/useFavorites";
 import { useCart } from "../hooks/useCart";
+import PlaceholderImg from "../assets/img/placeholder.jpg";
 
 type ProductCardProps = {
 	product: IProduct;
@@ -35,7 +36,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 			productId: product.id,
 			name: product.name,
 			price: product.price,
-			imgSrc: product.imgSrc || "/placeholder.jpg",
+			imgSrc: product.imgSrc || PlaceholderImg,
 		});
 	};
 
@@ -44,7 +45,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 			productId: product.id,
 			name: product.name,
 			price: product.price,
-			imgSrc: product.imgSrc || "/placeholder.jpg",
+			imgSrc: product.imgSrc || PlaceholderImg,
 		});
 	};
 
@@ -60,7 +61,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 		<div className="col">
 			<div className="card h-100">
 				<img
-					src={product.imgSrc || "/placeholder.jpg"}
+					src={product.imgSrc || PlaceholderImg}
 					className="card-img-top"
 					alt={product.name}
 				/>
