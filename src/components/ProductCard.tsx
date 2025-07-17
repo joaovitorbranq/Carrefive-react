@@ -21,9 +21,9 @@ const ProductCard = ({ product, onBuy }: ProductCardProps) => {
 				<div className="card-body">
 					<h5 className="card-title">{name}</h5>
 					<p className="card-text">{description}</p>
-					<p className="card-text">{`${
-						product.currency.label
-					} ${formatNumberToPrice(product.price)}`}</p>
+					<p className="card-text">{`R$${formatNumberToPrice(
+						product.price
+					)}`}</p>
 					<button className="btn btn-primary w-100" onClick={onBuy}>
 						Comprar
 					</button>

@@ -1,9 +1,9 @@
 export interface IProduct {
+	id: number;
 	name: string;
 	description: string;
 	price: number;
-	currency: ICurrency;
-	imgSrc?: string;
+	imgSrc?: string | null;
 }
 
 export interface ICurrency {

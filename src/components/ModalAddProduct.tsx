@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { ICurrency, IProduct } from "../types/types";
+import type { IProduct } from "../types/types";
 
 interface IModalAddProductProps {
 	isOpen: boolean;
@@ -7,17 +7,11 @@ interface IModalAddProductProps {
 	onSave: (data: IProduct) => void;
 }
 
-const defaultCurrency: ICurrency = {
-	id: 1,
-	name: "real",
-	label: "R$",
-};
-
-const initalProduct: IProduct = {
+const initialProduct: IProduct = {
+	id: -1,
 	name: "",
 	description: "",
 	price: 0,
-	currency: defaultCurrency,
 };
 
 const ModalAddProduct: React.FC<IModalAddProductProps> = ({
@@ -25,39 +19,24 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 	onClose,
 	onSave,
 }) => {
-	const [formProduto, setFormProduto] = useState<IProduct>(initalProduct);
-
-	const [currencies] = useState<ICurrency[]>([
-		{ id: 1, name: "real", label: "R$" },
-		{ id: 2, name: "dolar", label: "US$" },
-		{ id: 3, name: "euro", label: "€" },
-	]);
+	const [formProduto, setFormProduto] = useState<IProduct>(initialProduct);
 
 	useEffect(() => {
-		if (isOpen)
+		if (isOpen) {
 			setFormProduto({
-				name: "",
-				description: "",
-				price: 0,
-				currency: currencies[0],
+				...initialProduct,
 			});
-	}, [isOpen, currencies]);
+		}
+	}, [isOpen]);
 
 	const handleChange = (
-		e: React.ChangeEvent<
-			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-		>
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
 
 		setFormProduto((prev) => ({
 			...prev,
-			[name]:
-				name === "price"
-					? Number(value)
-					: name === "currency"
-					? currencies.find((c) => c.id === Number(value)) || prev.currency
-					: value,
+			[name]: name === "price" ? Number(value) : value,
 		}));
 	};
 
@@ -65,10 +44,7 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 		e.preventDefault();
 		onSave(formProduto);
 	};
-
-	useEffect(() => {
-		console.log(formProduto, "form");
-	}, [formProduto]);
+	console.log(formProduto, "formProduto");
 
 	if (!isOpen) return null;
 
@@ -139,25 +115,6 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 									onChange={handleChange}
 									required
 								/>
-							</div>
-							<div className="mb-3">
-								<label htmlFor="currency" className="form-label">
-									Moeda
-								</label>
-								<select
-									className="form-select"
-									id="currency"
-									name="currency"
-									value={formProduto.currency.id}
-									onChange={handleChange}
-									required
-								>
-									{currencies.map((currency) => (
-										<option key={currency.id} value={currency.id}>
-											{currency.label}
-										</option>
-									))}
-								</select>
 							</div>
 						</div>
 						<div className="modal-footer">
