@@ -1,9 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "../hooks/useCart";
 import { formatNumberToPrice } from "../utils/utils";
 
 const CartPage = () => {
-	const { cartItems, removeItem } = useCart();
+	const { cartItems, removeItem, updateQuantity } = useCart();
+	const [quantities, setQuantities] = useState<Record<number, string>>(() =>
+		Object.fromEntries(
+			cartItems.map((item) => [item.productId, item.quantity.toString()])
+		)
+	);
+
+	const handleChange = (productId: number, value: string) => {
+		const parsed = parseInt(value, 10);
+
+		if (value === "" || (!Number.isNaN(parsed) && parsed >= 0)) {
+			setQuantities((prev) => ({
+				...prev,
+				[productId]: value,
+			}));
+		}
+	};
+
+	const handleBlur = (productId: number) => {
+		const raw = quantities[productId];
+		const parsed = parseInt(raw, 10);
+
+		if (!isNaN(parsed) && parsed > 0) {
+			updateQuantity(productId, parsed);
+		} else {
+			const original = cartItems.find((item) => item.productId === productId);
+			if (original) {
+				setQuantities((prev) => ({
+					...prev,
+					[productId]: original.quantity.toString(),
+				}));
+			}
+		}
+	};
+
+	const totalCart = cartItems.reduce(
+		(acc, item) => acc + item.price * item.quantity,
+		0
+	);
 
 	if (cartItems.length === 0) {
 		return <p className="mt-5 text-center">Seu carrinho está vazio.</p>;
@@ -31,12 +69,24 @@ const CartPage = () => {
 									src={item.imgSrc || "/placeholder.jpg"}
 									alt={item.name}
 									className="img-fluid"
-									style={{ width: "80px", height: "80px", objectFit: "cover" }}
+									style={{
+										width: "80px",
+										height: "80px",
+										objectFit: "cover",
+									}}
 								/>
 							</td>
 							<td>{item.name}</td>
 							<td>R${formatNumberToPrice(item.price)}</td>
-							<td>{item.quantity}</td>
+							<td style={{ width: "100px" }}>
+								<input
+									type="text"
+									value={quantities[item.productId] || ""}
+									onChange={(e) => handleChange(item.productId, e.target.value)}
+									onBlur={() => handleBlur(item.productId)}
+									className="form-control form-control-sm text-center"
+								/>
+							</td>
 							<td>R${formatNumberToPrice(item.price * item.quantity)}</td>
 							<td>
 								<button
@@ -48,6 +98,14 @@ const CartPage = () => {
 							</td>
 						</tr>
 					))}
+					<tr>
+						<td colSpan={4} className="text-end fw-bold">
+							Total do Carrinho:
+						</td>
+						<td colSpan={2} className="fw-bold">
+							R${formatNumberToPrice(totalCart)}
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

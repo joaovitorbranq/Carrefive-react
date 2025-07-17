@@ -12,9 +12,12 @@ type ProductCardProps = {
 const ProductCard = ({ product }: ProductCardProps) => {
 	const { user } = useUser();
 	const { isFavorited, addFavorite, removeFavorite } = useFavorites();
-	const { addItem } = useCart();
+	const { cartItems, addItem, updateQuantity, removeItem } = useCart();
 
 	const favorited = isFavorited(product.id);
+
+	const itemInCart = cartItems.find((item) => item.productId === product.id);
+	const quantity = itemInCart?.quantity || 0;
 
 	const handleToggleFavorite = async (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -34,6 +37,23 @@ const ProductCard = ({ product }: ProductCardProps) => {
 			price: product.price,
 			imgSrc: product.imgSrc || "/placeholder.jpg",
 		});
+	};
+
+	const handleIncrement = () => {
+		addItem({
+			productId: product.id,
+			name: product.name,
+			price: product.price,
+			imgSrc: product.imgSrc || "/placeholder.jpg",
+		});
+	};
+
+	const handleDecrement = () => {
+		if (quantity === 1) {
+			removeItem(product.id);
+		} else {
+			updateQuantity(product.id, quantity - 1);
+		}
 	};
 
 	return (
@@ -65,9 +85,30 @@ const ProductCard = ({ product }: ProductCardProps) => {
 					<p className="card-text">{`R$${formatNumberToPrice(
 						product.price
 					)}`}</p>
-					<button className="btn btn-primary w-100" onClick={handleAddToCart}>
-						Comprar
-					</button>
+
+					{quantity > 0 ? (
+						<div className="d-flex justify-content-between align-items-center">
+							<button
+								className="btn btn-outline-danger"
+								onClick={handleDecrement}
+								style={{ width: "40px" }}
+							>
+								-
+							</button>
+							<span>{quantity}</span>
+							<button
+								className="btn btn-outline-success"
+								onClick={handleIncrement}
+								style={{ width: "40px" }}
+							>
+								+
+							</button>
+						</div>
+					) : (
+						<button className="btn btn-primary w-100" onClick={handleAddToCart}>
+							Comprar
+						</button>
+					)}
 				</div>
 			</div>
 		</div>
