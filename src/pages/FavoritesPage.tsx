@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useFavorites } from "../hooks/useFavorites";
 import { useUser } from "../hooks/useUser";
+import PlaceholderImg from "../assets/img/placeholder.jpg";
 
 const FavoritesPage = () => {
 	const { user } = useUser();
@@ -40,7 +41,7 @@ const FavoritesPage = () => {
 						<tr key={product.id}>
 							<td>
 								<img
-									src={product.imgSrc || "/placeholder.jpg"}
+									src={product.imgSrc || PlaceholderImg}
 									alt={product.name}
 									className="img-fluid"
 									style={{ width: "80px", height: "80px", objectFit: "cover" }}

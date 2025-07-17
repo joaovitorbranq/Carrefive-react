@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useCart } from "../hooks/useCart";
 import { formatNumberToPrice } from "../utils/utils";
+import PlaceholderImg from "../assets/img/placeholder.jpg";
 
 const CartPage = () => {
 	const { cartItems, removeItem, updateQuantity } = useCart();
 	const [quantities, setQuantities] = useState<Record<number, string>>(() =>
+		// transforma o array de cartItems em um objeto com as quantidades de cada produto
 		Object.fromEntries(
 			cartItems.map((item) => [item.productId, item.quantity.toString()])
 		)
@@ -66,7 +68,7 @@ const CartPage = () => {
 						<tr key={item.productId}>
 							<td>
 								<img
-									src={item.imgSrc || "/placeholder.jpg"}
+									src={item.imgSrc || PlaceholderImg}
 									alt={item.name}
 									className="img-fluid"
 									style={{
