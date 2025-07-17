@@ -1,12 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.png";
 import React, { useState } from "react";
-import { useUser } from "../hooks/useUser"; // seu hook de autenticação
+import { useUser } from "../hooks/useUser";
 
 const Navbar = () => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
-	const { user } = useUser(); // 👈 pega usuário logado
+	const { user } = useUser();
 
 	const handleToggleMenu = () => setMenuOpen((open) => !open);
 	const handleNavClick = () => setMenuOpen(false);
@@ -88,13 +88,22 @@ const Navbar = () => {
 						</div>
 
 						{user && (
-							<NavLink
-								className="nav-link me-3"
-								to="/favorites"
-								onClick={handleNavClick}
-							>
-								Favoritos
-							</NavLink>
+							<>
+								<NavLink
+									className="nav-link me-3"
+									to="/favorites"
+									onClick={handleNavClick}
+								>
+									Favoritos
+								</NavLink>
+								<NavLink
+									className="nav-link me-3"
+									to="/carrinho"
+									onClick={handleNavClick}
+								>
+									Carrinho
+								</NavLink>
+							</>
 						)}
 					</div>
 				</div>

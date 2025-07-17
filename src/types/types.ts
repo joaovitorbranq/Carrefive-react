@@ -31,3 +31,11 @@ export interface IProductFormValues {
 	price: number;
 	imgSrc: string;
 }
+
+export interface ICartItem {
+	productId: number;
+	name: string;
+	price: number;
+	imgSrc?: string;
+	quantity: number;
+}

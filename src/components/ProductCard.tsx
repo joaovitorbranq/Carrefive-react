@@ -3,15 +3,17 @@ import type { IProduct } from "../types/types";
 import { formatNumberToPrice } from "../utils/utils";
 import { useUser } from "../hooks/useUser";
 import { useFavorites } from "../hooks/useFavorites";
+import { useCart } from "../hooks/useCart";
 
 type ProductCardProps = {
 	product: IProduct;
-	onBuy: () => void;
 };
 
-const ProductCard = ({ product, onBuy }: ProductCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
 	const { user } = useUser();
 	const { isFavorited, addFavorite, removeFavorite } = useFavorites();
+	const { addItem } = useCart();
+
 	const favorited = isFavorited(product.id);
 
 	const handleToggleFavorite = async (e: React.MouseEvent) => {
@@ -23,6 +25,15 @@ const ProductCard = ({ product, onBuy }: ProductCardProps) => {
 		} else {
 			await addFavorite(product.id);
 		}
+	};
+
+	const handleAddToCart = () => {
+		addItem({
+			productId: product.id,
+			name: product.name,
+			price: product.price,
+			imgSrc: product.imgSrc || "/placeholder.jpg",
+		});
 	};
 
 	return (
@@ -54,7 +65,7 @@ const ProductCard = ({ product, onBuy }: ProductCardProps) => {
 					<p className="card-text">{`R$${formatNumberToPrice(
 						product.price
 					)}`}</p>
-					<button className="btn btn-primary w-100" onClick={onBuy}>
+					<button className="btn btn-primary w-100" onClick={handleAddToCart}>
 						Comprar
 					</button>
 				</div>

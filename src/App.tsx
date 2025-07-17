@@ -8,6 +8,7 @@ import ShoppingPage from "./pages/ShoppingPage";
 import Footer from "./components/Footer";
 import FavoritesPage from "./pages/FavoritesPage";
 import RegisterPage from "./pages/RegisterPage";
+import CartPage from "./pages/CartPage";
 
 const App = () => {
 	const defaultStyles: React.CSSProperties = {
@@ -29,6 +30,7 @@ const App = () => {
 						<Route path="/login" element={<LoginPage />} />
 						<Route path="/favorites" element={<FavoritesPage />} />
 						<Route path="/register" element={<RegisterPage />} />
+						<Route path="/carrinho" element={<CartPage />} />
 					</Routes>
 				</div>
 				<Footer />
