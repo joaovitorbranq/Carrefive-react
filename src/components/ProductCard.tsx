@@ -106,7 +106,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
 							</button>
 						</div>
 					) : (
-						<button className="btn btn-primary w-100" onClick={handleAddToCart}>
+						<button
+							className="btn btn-primary w-100"
+							onClick={handleAddToCart}
+							disabled={!user}
+						>
 							Comprar
 						</button>
 					)}
