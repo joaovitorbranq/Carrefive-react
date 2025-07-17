@@ -98,14 +98,20 @@ const Navbar = () => {
 						)}
 					</div>
 				</div>
-
 				<div className="d-flex align-items-center ms-auto">
 					<Link
 						to="/login"
 						onClick={handleNavClick}
-						className="btn btn-outline-primary"
+						className="btn btn-outline-primary me-2"
 					>
 						Entrar
+					</Link>
+					<Link
+						to="/register"
+						onClick={handleNavClick}
+						className="btn btn-outline-secondary"
+					>
+						Cadastrar
 					</Link>
 				</div>
 			</div>
