@@ -1,92 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { api } from "../services/api";
+import React, { useEffect } from "react";
+import { useFavorites } from "../hooks/useFavorites";
 import { useUser } from "../hooks/useUser";
-import type { IProduct } from "../types/types";
 
 const FavoritesPage = () => {
 	const { user } = useUser();
-	const [favorites, setFavorites] = useState<IProduct[]>([]);
-	const [loading, setLoading] = useState(true);
+	const { favorites, fetchFavorites, removeFavorite } = useFavorites();
 
 	useEffect(() => {
-		const fetchFavorites = async () => {
-			if (!user) return;
-
-			try {
-				const response = await api.get(`/favorites/user/${user.id}`);
-				setFavorites(response.data);
-			} catch (error) {
-				console.error("Erro ao buscar favoritos:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchFavorites();
+		if (user?.id) {
+			fetchFavorites();
+		}
 	}, [user]);
 
-	const handleRemove = async (productId: number) => {
-		if (!user) return;
-
-		try {
-			await api.delete(`/favorites`, {
-				data: { userId: user.id, productId },
-			});
-			setFavorites((prev) => prev.filter((p) => p.id !== productId));
-		} catch (error) {
-			console.error("Erro ao remover favorito:", error);
-		}
-	};
-
 	if (!user) {
-		return <div className="container mt-5">Você precisa estar logado.</div>;
+		return (
+			<p className="mt-5 text-center">Faça login para ver seus favoritos.</p>
+		);
 	}
 
-	if (loading) {
-		return <div className="container mt-5">Carregando...</div>;
+	if (!favorites.length) {
+		return <p className="mt-5 text-center">Você ainda não possui favoritos.</p>;
 	}
 
 	return (
 		<div className="container mt-5">
 			<h2 className="mb-4">Meus Favoritos</h2>
-			{favorites.length === 0 ? (
-				<p>Nenhum produto favoritado ainda.</p>
-			) : (
-				<table className="table table-bordered align-middle">
-					<thead className="table-light">
-						<tr>
-							<th style={{ width: "120px" }}>Imagem</th>
-							<th>Nome</th>
-							<th>Preço</th>
-							<th>Ações</th>
+			<table className="table table-bordered align-middle">
+				<thead className="table-light">
+					<tr>
+						<th style={{ width: "100px" }}>Imagem</th>
+						<th>Nome</th>
+						<th>Preço</th>
+						<th>Categoria</th>
+						<th style={{ width: "150px" }}>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					{favorites.map((product) => (
+						<tr key={product.id}>
+							<td>
+								<img
+									src={product.imgSrc || "/placeholder.jpg"}
+									alt={product.name}
+									className="img-fluid"
+									style={{ width: "80px", height: "80px", objectFit: "cover" }}
+								/>
+							</td>
+							<td>{product.name}</td>
+							<td>R${product.price?.toFixed(2)}</td>
+							<td>{product.productType?.name || "Não informado"}</td>
+							<td>
+								<button
+									className="btn btn-danger w-100"
+									onClick={() => removeFavorite(product.id)}
+								>
+									Remover
+								</button>
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{favorites.map((product) => (
-							<tr key={product.id}>
-								<td>
-									<img
-										src={product.imgSrc || "/placeholder.jpg"}
-										alt={product.name}
-										className="img-fluid"
-										style={{ maxWidth: "100px" }}
-									/>
-								</td>
-								<td>{product.name}</td>
-								<td>{`R$${product.price.toFixed(2)}`}</td>
-								<td>
-									<button
-										className="btn btn-danger btn-sm"
-										onClick={() => handleRemove(product.id)}
-									>
-										Remover
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			)}
+					))}
+				</tbody>
+			</table>
 		</div>
 	);
 };

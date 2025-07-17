@@ -1,46 +1,62 @@
-// hooks/useFavorites.ts
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "../services/api";
-import { useUser } from "./useUser";
 import type { IProduct } from "../types/types";
+import { useUser } from "./useUser";
 
-export const useFavorites = () => {
+export function useFavorites() {
 	const { user } = useUser();
 	const [favorites, setFavorites] = useState<IProduct[]>([]);
 
-	useEffect(() => {
-		const fetchFavorites = async () => {
-			if (!user) return;
-			try {
-				const response = await api.get(`/favorites/user/${user.id}`);
-				setFavorites(response.data);
-			} catch (error) {
-				console.error("Erro ao buscar favoritos:", error);
-			}
-		};
-
-		fetchFavorites();
+	const fetchFavorites = useCallback(async () => {
+		if (!user) return;
+		try {
+			const response = await api.get(`/favorites/user/${user.id}`);
+			setFavorites(response.data);
+		} catch (error) {
+			console.error("Erro ao buscar favoritos:", error);
+		}
 	}, [user]);
 
-	const isFavorited = (productId: number) =>
-		favorites.some((fav) => fav.id === productId);
+	useEffect(() => {
+		fetchFavorites();
+	}, [fetchFavorites]);
 
 	const addFavorite = async (productId: number) => {
 		if (!user) return;
-		await api.post(`/favorites`, {
-			userId: user.id,
-			productId,
-		});
-		setFavorites((prev) => [...prev, { id: productId } as IProduct]);
+		try {
+			await api.post("/favorites", {
+				userId: user.id,
+				productId,
+			});
+			await fetchFavorites();
+		} catch (error) {
+			console.error("Erro ao adicionar favorito:", error);
+		}
 	};
 
 	const removeFavorite = async (productId: number) => {
 		if (!user) return;
-		await api.delete(`/favorites`, {
-			data: { userId: user.id, productId },
-		});
-		setFavorites((prev) => prev.filter((fav) => fav.id !== productId));
+		try {
+			await api.delete("/favorites", {
+				data: {
+					userId: user.id,
+					productId,
+				},
+			});
+			await fetchFavorites();
+		} catch (error) {
+			console.error("Erro ao remover favorito:", error);
+		}
 	};
 
-	return { favorites, isFavorited, addFavorite, removeFavorite };
-};
+	const isFavorited = (productId: number) =>
+		favorites.some((fav) => fav.id === productId);
+
+	return {
+		favorites,
+		isFavorited,
+		addFavorite,
+		removeFavorite,
+		fetchFavorites,
+	};
+}

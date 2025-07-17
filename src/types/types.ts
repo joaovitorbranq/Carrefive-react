@@ -4,6 +4,10 @@ export interface IProduct {
 	description: string;
 	price: number;
 	imgSrc?: string | null;
+	productType?: {
+		id: number;
+		name: string;
+	};
 }
 
 export interface ICurrency {
