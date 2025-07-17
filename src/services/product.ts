@@ -33,3 +33,8 @@ export const createProduct = async (
 	});
 	return response.data;
 };
+
+export const deleteProduct = async (id: number) => {
+	const response = await api.delete(`/products/${id}`);
+	return response.data;
+};
