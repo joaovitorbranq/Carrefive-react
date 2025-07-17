@@ -1,5 +1,5 @@
 import { api } from "./api";
-import type { IProduct } from "../types/types";
+import type { IProduct, IProductFormValues } from "../types/types";
 
 interface ProductPage {
 	content: IProduct[];
@@ -19,6 +19,17 @@ export const fetchProductsByType = async (
 			page,
 			size,
 		},
+	});
+	return response.data;
+};
+
+export const createProduct = async (
+	data: IProductFormValues,
+	productTypeId: number
+): Promise<IProduct> => {
+	const response = await api.post("/products", {
+		...data,
+		productType: { id: productTypeId },
 	});
 	return response.data;
 };

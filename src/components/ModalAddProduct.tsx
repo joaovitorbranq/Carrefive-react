@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from "react";
-import type { IProduct } from "../types/types";
+import type { IProduct, IProductFormValues } from "../types/types";
 
 interface IModalAddProductProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onSave: (data: IProduct) => void;
+	onSave: (data: IProductFormValues) => void;
 }
-
-const initialProduct: IProduct = {
-	id: -1,
-	name: "",
-	description: "",
-	price: 0,
-};
 
 const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 	isOpen,
 	onClose,
 	onSave,
 }) => {
-	const [formProduto, setFormProduto] = useState<IProduct>(initialProduct);
+	const [formProduto, setFormProduto] = useState<IProductFormValues>({
+		name: "",
+		description: "",
+		price: 0,
+		imgSrc: "",
+	});
 
 	useEffect(() => {
 		if (isOpen) {
 			setFormProduto({
-				...initialProduct,
+				name: "",
+				description: "",
+				price: 0,
+				imgSrc: "",
 			});
 		}
 	}, [isOpen]);
@@ -44,6 +45,7 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 		e.preventDefault();
 		onSave(formProduto);
 	};
+
 	console.log(formProduto, "formProduto");
 
 	if (!isOpen) return null;
@@ -114,6 +116,20 @@ const ModalAddProduct: React.FC<IModalAddProductProps> = ({
 									value={formProduto.price}
 									onChange={handleChange}
 									required
+								/>
+							</div>
+							<div className="mb-3">
+								<label htmlFor="imgSrc" className="form-label">
+									URL da Imagem (opcional)
+								</label>
+								<input
+									type="text"
+									className="form-control"
+									id="imgSrc"
+									name="imgSrc"
+									placeholder="https://exemplo.com/imagem.jpg"
+									value={formProduto.imgSrc ?? ""}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>

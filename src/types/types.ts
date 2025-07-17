@@ -20,3 +20,10 @@ export interface IUser {
 	birthDate: string;
 	isAdmin: boolean;
 }
+
+export interface IProductFormValues {
+	name: string;
+	description: string;
+	price: number;
+	imgSrc: string;
+}

@@ -3,8 +3,8 @@ import ProductCard from "../components/ProductCard";
 import ModalBuyProduct from "../components/ModalBuyProduct";
 import ModalAddProduct from "../components/ModalAddProduct";
 import PlaceholderImg from "../assets/img/placeholder.jpg";
-import type { IProduct } from "../types/types";
-import { fetchProductsByType } from "../services/product";
+import type { IProduct, IProductFormValues } from "../types/types";
+import { createProduct, fetchProductsByType } from "../services/product";
 
 const DrogariaPage = () => {
 	const [showBuyModal, setShowBuyModal] = useState(false);
@@ -32,15 +32,14 @@ const DrogariaPage = () => {
 		loadProducts(page);
 	};
 
-	const handleAddProduct = (prod: IProduct) => {
-		setProducts([
-			...products,
-			{
-				...prod,
-				imgSrc: PlaceholderImg,
-			},
-		]);
-		setShowAddModal(false);
+	const handleAddProduct = async (formData: IProductFormValues) => {
+		try {
+			const newProduct = await createProduct(formData, 3); // 3 = Drogaria
+			setProducts([...products, newProduct]);
+			setShowAddModal(false);
+		} catch (error) {
+			console.error("Erro ao adicionar produto:", error);
+		}
 	};
 
 	return (
